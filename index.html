@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="偌米RuoMI - 专业五金制品品牌,提供功能五金、厨卫五金、柜类照明等全屋高端五金解决方案">
+    <meta name="keywords" content="偌米,RuoMI,五金,家居五金,功能五金,厨卫五金">
+    <meta name="author" content="偌米集团股份有限公司">
+    <title>偌米 RuoMI - 专业五金制品品牌</title>
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 页面加载器 -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <img src="images/logo.png" alt="偌米RuoMI" class="loader-logo">
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header class="navbar" id="navbar">
+        <div class="container">
+            <nav class="nav">
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item active"><a href="#home" data-section="home">首页</a></li>
+                    <li class="nav-item"><a href="#products" data-section="products">产品中心</a></li>
+                    <li class="nav-item"><a href="#about" data-section="about">关于偌米</a></li>
+                    <li class="nav-item"><a href="#join" data-section="join">加入我们</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <button class="search-btn" aria-label="搜索">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="lang-btn" aria-label="切换语言">
+                        <i class="fas fa-globe"></i> EN
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="菜单">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-overlay"></div>
+        <div class="mobile-nav-content">
+            <ul class="mobile-nav-list">
+                <li><a href="#home" data-section="home">首页</a></li>
+                <li><a href="#products" data-section="products">产品中心</a></li>
+                <li><a href="#about" data-section="about">关于偌米</a></li>
+                <li><a href="#join" data-section="join">加入我们</a></li>
+            </ul>
+            <div class="mobile-nav-footer">
+                <button class="lang-switch">EN / 中文</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <main>
+        <!-- Banner轮播 -->
+        <section class="hero-section" id="home">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper">
+                    <article class="swiper-slide hero-slide">
+                        <div class="hero-bg" style="background-image: url('images/banner-01.jpg')"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title">偌米五金</h1>
+                            <p class="hero-subtitle">专业五金制品品牌</p>
+                        </div>
+                    </article>
+                    
+                    <article class="swiper-slide hero-slide">
+                        <div class="hero-bg" style="background-image: url('images/banner-02.jpg')"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title">品质生活</h1>
+                            <p class="hero-subtitle">从偌米五金开始</p>
+                        </div>
+                    </article>
+                    
+                    <article class="swiper-slide hero-slide">
+                        <div class="hero-bg" style="background-image: url('images/banner-03.jpg')"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title">创新设计</h1>
+                            <p class="hero-subtitle">引领行业潮流</p>
+                        </div>
+                    </article>
+                    
+                    <article class="swiper-slide hero-slide">
+                        <div class="hero-bg" style="background-image: url('images/banner-04.jpg')"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title">全球服务</h1>
+                            <p class="hero-subtitle">值得信赖的伙伴</p>
+                        </div>
+                    </article>
+                    
+                    <article class="swiper-slide hero-slide">
+                        <div class="hero-bg" style="background-image: url('images/banner-05.jpg')"></div>
+                        <div class="hero-content">
+                            <h1 class="hero-title">匠心制造</h1>
+                            <p class="hero-subtitle">品质成就未来</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- 产品中心 -->
+        <section class="section products-section" id="products">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">产品中心</h2>
+                    <p class="section-subtitle">PRODUCT CENTER</p>
+                </header>
+                
+                <div class="products-grid">
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-kitchen.jpg" alt="厨房收纳系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>厨房收纳系列</h3>
+                            <p>智能厨房收纳解决方案</p>
+                        </div>
+                    </article>
+                    
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-wardrobe.jpg" alt="衣柜收纳系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>衣柜收纳系列</h3>
+                            <p>高端衣柜收纳系统</p>
+                        </div>
+                    </article>
+                    
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-furniture.jpg" alt="家具五金系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>家具五金系列</h3>
+                            <p>专业家具五金配件</p>
+                        </div>
+                    </article>
+                    
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-lighting.jpg" alt="柜类照明系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>柜类照明系列</h3>
+                            <p>智能照明解决方案</p>
+                        </div>
+                    </article>
+                    
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-bathroom.jpg" alt="卫浴五金系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>卫浴五金系列</h3>
+                            <p>高端卫浴五金配件</p>
+                        </div>
+                    </article>
+                    
+                    <article class="product-card">
+                        <figure class="product-image">
+                            <img src="images/prod-outdoor.jpg" alt="户外家具系列" loading="lazy">
+                        </figure>
+                        <div class="product-info">
+                            <h3>户外家具系列</h3>
+                            <p>户外休闲家具解决方案</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于偌米 -->
+        <section class="section about-section" id="about">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">关于偌米</h2>
+                    <p class="section-subtitle">ABOUT RUOMI</p>
+                </header>
+                
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>偌米集团股份有限公司</h3>
+                        <p>偌米集团股份有限公司,创始于20XX年,是一家以家居五金为核心,包括功能五金、基础五金、厨卫五金、柜类照明、户外家具于一体的多元化创新型企业。</p>
+                        <p>致力于为全球用户打造一站式全屋高端五金解决方案。作为中国家居五金行业知名品牌,品牌知名度及销售规模在国内处于领先地位。</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                <span class="counter" data-target="XXX">0</span>+
+                            </div>
+                            <div class="stat-label">生产基地面积(㎡)</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                <span class="counter" data-target="XXX">0</span>+
+                            </div>
+                            <div class="stat-label">自主创新专利</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                <span class="counter" data-target="XXX">0</span>+
+                            </div>
+                            <div class="stat-label">服务客户</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                <span class="counter" data-target="XXX">0</span>+
+                            </div>
+                            <div class="stat-label">全球经销商</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 加入我们 -->
+        <section class="section join-section" id="join">
+            <div class="container">
+                <header class="section-header">
+                    <h2 class="section-title">加入我们</h2>
+                    <p class="section-subtitle">JOIN US</p>
+                </header>
+                
+                <div class="join-content">
+                    <div class="join-text">
+                        <h3>站在一个更好的起点,开创自己的未来!</h3>
+                        <p>偌米集团欢迎优秀人才的加入,我们提供具有竞争力的薪酬福利、完善的职业发展通道和广阔的成长平台。</p>
+                        <a href="javascript:void(0)" class="btn btn-primary">了解更多</a>
+                    </div>
+                    <div class="join-image">
+                        <img src="images/join-us.jpg" alt="加入我们" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="images/footer-logo.png" alt="偌米RuoMI">
+                    <p>偌米集团股份有限公司,创始于20XX年,致力于为<br>全球用户打造一站式全屋高端五金解决方案。</p>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>联系我们</h4>
+                    <p><i class="fas fa-phone"></i> 400-XXX-XXXX</p>
+                    <p><i class="fas fa-envelope"></i> info@ruomi.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> XXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+                </div>
+                
+                <div class="footer-social">
+                    <h4>关注我们</h4>
+                    <div class="social-links">
+                        <a href="javascript:void(0)" class="social-link" aria-label="微信">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="social-link" aria-label="微博">
+                            <i class="fab fa-weibo"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="social-link" aria-label="抖音">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 20XX-2026 偌米集团股份有限公司 版权所有 | <a href="javascript:void(0)">粤ICP备XXXXXXXX号</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    
+    <!-- 自定义脚本 -->
+    <script src="js/main.js"></script>
+</body>
+</html>
