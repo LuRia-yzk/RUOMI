@@ -8,6 +8,17 @@
     <meta name="author" content="偌米集团股份有限公司">
     <title>偌米 RuoMI - 专业五金制品品牌</title>
     
+    <!-- DNS预取和预连接优化 -->
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- 关键资源预加载 -->
+    <link rel="preload" href="images/logo.png" as="image">
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
     
@@ -21,7 +32,7 @@
     <!-- 页面加载器 -->
     <div class="loader" id="loader">
         <div class="loader-content">
-            <img src="images/logo.png" alt="偌米RuoMI" class="loader-logo">
+            <img src="images/logo.png" alt="偌米RuoMI" class="loader-logo" fetchpriority="high">
             <div class="loader-bar">
                 <div class="loader-progress"></div>
             </div>
@@ -80,7 +91,7 @@
             <div class="swiper hero-swiper">
                 <div class="swiper-wrapper">
                     <article class="swiper-slide hero-slide">
-                        <div class="hero-bg" style="background-image: url('images/banner-01.jpg')"></div>
+                        <div class="hero-bg" style="background-image: url('images/banner-01.jpg')" loading="lazy"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">偌米五金</h1>
                             <p class="hero-subtitle">专业五金制品品牌</p>
@@ -88,7 +99,7 @@
                     </article>
                     
                     <article class="swiper-slide hero-slide">
-                        <div class="hero-bg" style="background-image: url('images/banner-02.jpg')"></div>
+                        <div class="hero-bg" style="background-image: url('images/banner-02.jpg')" loading="lazy"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">品质生活</h1>
                             <p class="hero-subtitle">从偌米五金开始</p>
@@ -96,7 +107,7 @@
                     </article>
                     
                     <article class="swiper-slide hero-slide">
-                        <div class="hero-bg" style="background-image: url('images/banner-03.jpg')"></div>
+                        <div class="hero-bg" style="background-image: url('images/banner-03.jpg')" loading="lazy"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">创新设计</h1>
                             <p class="hero-subtitle">引领行业潮流</p>
@@ -104,7 +115,7 @@
                     </article>
                     
                     <article class="swiper-slide hero-slide">
-                        <div class="hero-bg" style="background-image: url('images/banner-04.jpg')"></div>
+                        <div class="hero-bg" style="background-image: url('images/banner-04.jpg')" loading="lazy"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">全球服务</h1>
                             <p class="hero-subtitle">值得信赖的伙伴</p>
@@ -112,7 +123,7 @@
                     </article>
                     
                     <article class="swiper-slide hero-slide">
-                        <div class="hero-bg" style="background-image: url('images/banner-05.jpg')"></div>
+                        <div class="hero-bg" style="background-image: url('images/banner-05.jpg')" loading="lazy"></div>
                         <div class="hero-content">
                             <h1 class="hero-title">匠心制造</h1>
                             <p class="hero-subtitle">品质成就未来</p>

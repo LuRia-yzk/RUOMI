@@ -49,6 +49,10 @@
     --container-max-width: 1200px;
 }
 
+/* 关键资源预加载提示 */
+@import url('https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 /* 重置与基础样式 */
 *, *::before, *::after {
     margin: 0;
@@ -486,6 +490,7 @@ ul, ol {
 .product-image {
     overflow: hidden;
     aspect-ratio: 4 / 3;
+    background: var(--color-bg-secondary); /* 占位背景色 */
 }
 
 .product-image img {
@@ -493,10 +498,12 @@ ul, ol {
     height: 100%;
     object-fit: cover;
     transition: transform var(--transition-slow);
+    opacity: 0; /* 初始透明 */
 }
 
-.product-card:hover .product-image img {
-    transform: scale(1.1);
+.product-image img.loaded {
+    opacity: 1; /* 加载完成后显示 */
+    transition: opacity var(--transition-base);
 }
 
 .product-info {

@@ -59,6 +59,106 @@ const smoothScrollTo = (targetElement, offset = 80) => {
 };
 
 // ============================================
+// 图片优化工具类
+// ============================================
+class ImageOptimizer {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        // 1. 为所有懒加载图片添加淡入效果
+        this.setupLazyImages();
+        
+        // 2. 预加载关键图片
+        this.preloadCriticalImages();
+        
+        // 3. Banner图片按需加载
+        this.optimizeBannerImages();
+    }
+
+    setupLazyImages() {
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    
+                    // 创建新图片对象预加载
+                    const tempImg = new Image();
+                    tempImg.onload = () => {
+                        img.classList.add('loaded');
+                    };
+                    tempImg.src = img.src;
+                    
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px', // 提前50px开始加载
+            threshold: 0.01
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+
+    preloadCriticalImages() {
+        // 预加载首屏关键图片
+        const criticalImages = [
+            'images/logo.png',
+            'images/banner-01.jpg'
+        ];
+
+        criticalImages.forEach(src => {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = src;
+            document.head.appendChild(link);
+        });
+    }
+
+    optimizeBannerImages() {
+        // Banner轮播图片按需加载
+        const bannerSlides = document.querySelectorAll('.hero-slide');
+        
+        if (bannerSlides.length === 0) return;
+
+        // 只加载前两张Banner,其余延迟加载
+        bannerSlides.forEach((slide, index) => {
+            const bg = slide.querySelector('.hero-bg');
+            if (!bg) return;
+
+            const bgStyle = bg.style.backgroundImage;
+            const match = bgStyle.match(/url\(['"]?([^'")]+)['"]?\)/);
+            
+            if (match && index > 1) {
+                // 非首屏Banner,移除background-image,改为data属性
+                bg.removeAttribute('style');
+                bg.setAttribute('data-bg', match[1]);
+                
+                // 当Slide激活时再加载
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach(mutation => {
+                        if (mutation.target.classList.contains('swiper-slide-active')) {
+                            const dataBg = bg.getAttribute('data-bg');
+                            if (dataBg) {
+                                bg.style.backgroundImage = `url('${dataBg}')`;
+                                bg.removeAttribute('data-bg');
+                                observer.disconnect();
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(slide, { attributes: true, attributeFilter: ['class'] });
+            }
+        });
+    }
+}
+
+// ============================================
 // 页面加载器
 // ============================================
 class PageLoader {
@@ -68,7 +168,14 @@ class PageLoader {
     }
 
     init() {
-        // 模拟加载进度
+        // 等待关键资源加载
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                this.hide();
+            }, 500); // 缩短等待时间
+        });
+
+        // 最长等待2秒
         setTimeout(() => {
             this.hide();
         }, 2000);
@@ -344,6 +451,9 @@ class App {
         // 禁止滚动直到加载完成
         document.body.style.overflow = 'hidden';
 
+        // 初始化图片优化(最先执行)
+        new ImageOptimizer();
+        
         // 初始化所有模块
         new PageLoader();
         new Navbar();
@@ -352,6 +462,7 @@ class App {
         new ScrollAnimation();
 
         console.log('🚀 偌米RuoMI官网已加载完成');
+        console.log('🖼️ 图片优化已启用');
     }
 }
 
