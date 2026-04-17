@@ -440,6 +440,341 @@ class ScrollAnimation {
 }
 
 // ============================================
+// 图片灯箱(Lightbox)
+// ============================================
+class Lightbox {
+    constructor() {
+        this.lightbox = document.getElementById('lightbox');
+        this.lightboxImage = document.getElementById('lightboxImage');
+        this.lightboxCaption = document.getElementById('lightboxCaption');
+        this.closeBtn = this.lightbox?.querySelector('.lightbox-close');
+        this.prevBtn = this.lightbox?.querySelector('.lightbox-prev');
+        this.nextBtn = this.lightbox?.querySelector('.lightbox-next');
+        this.overlay = this.lightbox?.querySelector('.lightbox-overlay');
+        
+        this.images = [];
+        this.currentIndex = 0;
+        
+        // 缩放相关
+        this.scale = 1;
+        this.minScale = 0.5;
+        this.maxScale = 3;
+        this.scaleStep = 0.2;
+        this.translateX = 0;
+        this.translateY = 0;
+        
+        // 双指手势相关
+        this.initialDistance = 0;
+        this.initialScale = 1;
+        this.isPinching = false;
+        
+        this.init();
+    }
+
+    init() {
+        if (!this.lightbox) return;
+
+        // 收集所有可点击的图片
+        this.collectImages();
+        
+        // 绑定事件
+        this.bindEvents();
+        
+        // 键盘支持
+        this.setupKeyboard();
+        
+        // 滚轮缩放
+        this.setupWheelZoom();
+        
+        // 双指手势缩放(移动端)
+        this.setupPinchZoom();
+        
+        // 拖拽平移
+        this.setupDragPan();
+    }
+
+    collectImages() {
+        const triggers = document.querySelectorAll('.lightbox-trigger');
+        
+        triggers.forEach(trigger => {
+            const img = trigger.querySelector('img');
+            if (img) {
+                this.images.push({
+                    src: img.src,
+                    alt: img.alt || '产品图片'
+                });
+            }
+        });
+    }
+
+    bindEvents() {
+        // 点击图片打开
+        const triggers = document.querySelectorAll('.lightbox-trigger');
+        triggers.forEach((trigger, index) => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.open(index);
+            });
+        });
+
+        // 关闭按钮
+        this.closeBtn?.addEventListener('click', () => this.close());
+        
+        // 点击遮罩关闭
+        this.overlay?.addEventListener('click', () => this.close());
+        
+        // 上一张/下一张
+        this.prevBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.prev();
+        });
+        
+        this.nextBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.next();
+        });
+
+        // 阻止图片容器内点击冒泡
+        this.lightboxImage?.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        
+        // 双击重置缩放
+        this.lightboxImage?.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            this.resetZoom();
+        });
+    }
+
+    setupKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            if (!this.lightbox.classList.contains('active')) return;
+
+            switch(e.key) {
+                case 'Escape':
+                    this.close();
+                    break;
+                case 'ArrowLeft':
+                    this.prev();
+                    break;
+                case 'ArrowRight':
+                    this.next();
+                    break;
+                case '+':
+                case '=':
+                    e.preventDefault();
+                    this.zoomIn();
+                    break;
+                case '-':
+                    e.preventDefault();
+                    this.zoomOut();
+                    break;
+                case '0':
+                    e.preventDefault();
+                    this.resetZoom();
+                    break;
+            }
+        });
+    }
+
+    setupWheelZoom() {
+        this.lightboxImage?.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (e.deltaY < 0) {
+                // 向上滚动 - 放大
+                this.zoomIn();
+            } else {
+                // 向下滚动 - 缩小
+                this.zoomOut();
+            }
+        }, { passive: false });
+    }
+
+    setupPinchZoom() {
+        if (!this.lightboxImage) return;
+
+        // 触摸开始
+        this.lightboxImage.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                this.isPinching = true;
+                
+                // 计算初始双指距离
+                this.initialDistance = this.getTouchDistance(e.touches[0], e.touches[1]);
+                this.initialScale = this.scale;
+            }
+        }, { passive: false });
+
+        // 触摸移动
+        this.lightboxImage.addEventListener('touchmove', (e) => {
+            if (this.isPinching && e.touches.length === 2) {
+                e.preventDefault();
+                
+                const currentDistance = this.getTouchDistance(e.touches[0], e.touches[1]);
+                const scaleRatio = currentDistance / this.initialDistance;
+                
+                let newScale = this.initialScale * scaleRatio;
+                newScale = Math.max(this.minScale, Math.min(this.maxScale, newScale));
+                
+                this.setScale(newScale);
+            }
+        }, { passive: false });
+
+        // 触摸结束
+        this.lightboxImage.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+                this.isPinching = false;
+            }
+        });
+    }
+
+    setupDragPan() {
+        if (!this.lightboxImage) return;
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        // 鼠标按下
+        this.lightboxImage.addEventListener('mousedown', (e) => {
+            if (this.scale > 1) {
+                isDragging = true;
+                startX = e.clientX - this.translateX;
+                startY = e.clientY - this.translateY;
+                this.lightboxImage.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+        });
+
+        // 鼠标移动
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            this.translateX = e.clientX - startX;
+            this.translateY = e.clientY - startY;
+            
+            this.updateTransform();
+        });
+
+        // 鼠标释放
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                this.lightboxImage.style.cursor = 'grab';
+            }
+        });
+
+        // 触摸拖拽(移动端)
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        this.lightboxImage.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1 && this.scale > 1) {
+                touchStartX = e.touches[0].clientX - this.translateX;
+                touchStartY = e.touches[0].clientY - this.translateY;
+            }
+        }, { passive: true });
+
+        this.lightboxImage.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && this.scale > 1) {
+                this.translateX = e.touches[0].clientX - touchStartX;
+                this.translateY = e.touches[0].clientY - touchStartY;
+                
+                this.updateTransform();
+            }
+        }, { passive: true });
+    }
+
+    getTouchDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    zoomIn() {
+        const newScale = Math.min(this.maxScale, this.scale + this.scaleStep);
+        this.setScale(newScale);
+    }
+
+    zoomOut() {
+        const newScale = Math.max(this.minScale, this.scale - this.scaleStep);
+        this.setScale(newScale);
+    }
+
+    setScale(newScale) {
+        this.scale = newScale;
+        
+        // 如果缩小到1以下,重置位置
+        if (this.scale <= 1) {
+            this.translateX = 0;
+            this.translateY = 0;
+        }
+        
+        this.updateTransform();
+    }
+
+    updateTransform() {
+        this.lightboxImage.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+    }
+
+    resetZoom() {
+        this.scale = 1;
+        this.translateX = 0;
+        this.translateY = 0;
+        this.updateTransform();
+    }
+
+    open(index) {
+        this.currentIndex = index;
+        this.resetZoom(); // 打开时重置缩放
+        this.updateImage();
+        this.lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // 禁止背景滚动
+        
+        // 设置光标样式
+        this.lightboxImage.style.cursor = 'grab';
+    }
+
+    close() {
+        this.resetZoom(); // 关闭时重置缩放
+        this.lightbox.classList.remove('active');
+        document.body.style.overflow = 'visible'; // 恢复滚动
+    }
+
+    prev() {
+        this.resetZoom(); // 切换图片时重置缩放
+        this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+        this.updateImage();
+    }
+
+    next() {
+        this.resetZoom(); // 切换图片时重置缩放
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        this.updateImage();
+    }
+
+    updateImage() {
+        const image = this.images[this.currentIndex];
+        
+        // 淡出效果
+        this.lightboxImage.style.opacity = '0';
+        
+        setTimeout(() => {
+            this.lightboxImage.src = image.src;
+            this.lightboxImage.alt = image.alt;
+            this.lightboxCaption.textContent = `${image.alt} (${this.currentIndex + 1}/${this.images.length}) | 滚轮缩放 | 双击重置`;
+            
+            // 淡入效果
+            this.lightboxImage.onload = () => {
+                this.lightboxImage.style.opacity = '1';
+            };
+        }, 200);
+    }
+}
+
+// ============================================
 // 主应用
 // ============================================
 class App {
@@ -460,9 +795,11 @@ class App {
         new HeroSlider();
         new CounterAnimation();
         new ScrollAnimation();
+        new Lightbox(); // 添加Lightbox
 
         console.log('🚀 偌米RuoMI官网已加载完成');
         console.log('🖼️ 图片优化已启用');
+        console.log('🔍 Lightbox图片放大已启用');
     }
 }
 
